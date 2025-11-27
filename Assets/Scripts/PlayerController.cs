@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
         gameManager = FindFirstObjectByType<GameManager>();
 
-        Physics.gravity *= gravityModifier;
+        
     }
 
     void Update()
@@ -41,6 +41,20 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetTrigger("Jump_trig");
             dirtParticle.Stop();
             playerAudio.PlayOneShot(jumpSound, 1.0f);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        // Only apply extra gravity if the game is running and player isn't dead
+        if (gameManager != null && gameManager.isGameActive && !gameOver)
+        {
+            // This applies the "Extra" gravity manually every physics frame
+            // Logic: Normal Gravity (1) + Extra Force (Modifier - 1) = Total Modified Gravity
+            if(playerRb != null)
+            {
+                playerRb.AddForce(Physics.gravity * (gravityModifier - 1), ForceMode.Acceleration);
+            }
         }
     }
     

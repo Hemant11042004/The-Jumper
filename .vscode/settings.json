@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Prototype 3.sln"
+    "dotnet.defaultSolution": "The Jumper.sln"
 }
