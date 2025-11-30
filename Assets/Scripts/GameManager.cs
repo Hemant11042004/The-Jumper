@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public Button restartButton;
     public Button playButton;
     public GameObject titleScreen;
+    public GameObject tutorialPanel;
 
     [Header("Pause Settings")]
     public GameObject pausePanel;
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
 
         // Game should start at the title screen only
         isGameActive = false;
-        Time.timeScale = 1f; // Reset time in case game was paused before
+        Time.timeScale = 0f; // Reset time in case game was paused before
 
         // Initial UI setup
         titleScreen.SetActive(true);
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         gameOverText.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
         pausePanel.SetActive(false);
+        tutorialPanel.SetActive(false);
     }
 
     void Update()
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
+    public void ShowTutorial()
     {
         // Called when the Play button is pressed in-game
         isGameActive = true;
@@ -62,15 +64,31 @@ public class GameManager : MonoBehaviour
         // Update UI
         titleScreen.SetActive(false);
         playButton.gameObject.SetActive(false);
-        scoreText.gameObject.SetActive(true);
+        tutorialPanel.SetActive(true);
+        scoreText.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
         gameOverText.SetActive(false);
         pausePanel.SetActive(false);
 
-        UpdateScore(0);
-        Debug.Log("Game Started");
+        Debug.Log("Tutorial Screen Shown.");
+        
+    }
 
-        // Play background music
+    public void StartGame()
+    {
+        // 1. Set game state
+        Time.timeScale = 1f;
+        isGameActive = true;
+        score = 0;
+
+        // 2. Hide the Tutorial Panel and show in-game UI
+        tutorialPanel.SetActive(false); 
+        scoreText.gameObject.SetActive(true);
+        
+        UpdateScore(0);
+        Debug.Log("Game Started! Time is resumed (timeScale = 1)");
+
+        // 3. Play background music
         if (bgMusic != null && !bgMusic.isPlaying)
         {
             bgMusic.Play();
